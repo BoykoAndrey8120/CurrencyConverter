@@ -22,7 +22,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var imageView1: UIImageView!
     @IBOutlet weak var imageView2: UIImageView!
     @IBOutlet weak var imageView3: UIImageView!
-    @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var changeBank: UIButton!
+    
     
     
     weak var delegatValue: ValueChangedDelegat?
@@ -33,6 +34,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var indexPathArray: [Int] = []
     var currencyItems: [CurrencyConversion] = [CurrencyConversion(name: "USD", sale: nil), CurrencyConversion(name: "EUR", sale: nil), CurrencyConversion(name: "RUR", sale: nil)]
     var baseValue: String?
+    var link = Links()
+    var temp = DataOfCurrencyRates()
     
     // MARK: Lifecycle
     override func viewDidAppear(_ animated: Bool) {
@@ -48,6 +51,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         scoreboardTableView.dataSource = self
         scoreboardTableView.register(UINib(nibName: "CurrencyScoreboardCell", bundle: nil), forCellReuseIdentifier: "CurrencyScoreboardCell")
         scoreboardTableView.reloadData()
+        changeBank.setTitle(link.editBank.rawValue, for: .normal)
+
+        
         
     }
     override func viewDidLayoutSubviews() {
@@ -69,15 +75,39 @@ class ViewController: UIViewController, UITextFieldDelegate {
         viewCurrency.layer.shadowOffset = CGSize(width: 0, height: 4)
         viewCurrency.layer.shadowOpacity = 1
         
+//        changeBank.titleLabel?.text = "text"
+        
     }
     
     // MARK: Actions
     
     @IBAction func showExchangeRates(_ sender: Any) {
         
-        button.isHidden = true
+        link.changeBank()
+        changeBank.setTitle(link.editBank.rawValue, for: .normal)
+        if link.editBank == .privatBank {
+//            DispatchQueue.main.async { [self] in
+               // currency.currencyUpdatePrivat()
+            temp.dataOfPrivatbank()
+                print(temp.currencyModel)
+//                self.temp?.dataOfPrivatbank()
+//                print("EEEEEEEEEEEEEEE\(temp?.currencyModel)")
+//            }
+        } else {
+//            DispatchQueue.main.async {
+                self.currency.currencyUpdateMono()
+//                self.temp?.dataOfMonobank()
+//                print("EEEEEEEEEEEEEEE\(self.temp?.currencyModel)")
+//            }
+        print(currency.array)
+    }
+        DispatchQueue.main.async {
+            self.currency.createResponse()
+        }
         
     }
+    // test
+    
     
     @IBAction func addCurrency(_ sender: UIButton) {
         

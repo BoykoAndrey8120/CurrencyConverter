@@ -57,13 +57,21 @@
                                             <constraint firstItem="Ada-jK-7I6" firstAttribute="leading" secondItem="lnM-YG-Nsv" secondAttribute="leading" id="rVh-97-8LQ"/>
                                         </constraints>
                                     </view>
-                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ifW-gg-Hqu">
+                                    <button opaque="NO" contentMode="center" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" hasAttributedTitle="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ifW-gg-Hqu">
                                         <rect key="frame" x="33.5" y="238" width="311" height="44"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="311" id="1m1-gg-eJi"/>
                                             <constraint firstAttribute="width" secondItem="ifW-gg-Hqu" secondAttribute="height" multiplier="7.07" id="DPT-3q-zgH"/>
                                         </constraints>
-                                        <state key="normal" title="Button" image="Image-5"/>
+                                        <state key="normal" image="Image-5">
+                                            <attributedString key="attributedTitle">
+                                                <fragment content="Button">
+                                                    <attributes>
+                                                        <font key="NSFont" metaFont="system" size="18"/>
+                                                    </attributes>
+                                                </fragment>
+                                            </attributedString>
+                                        </state>
                                         <connections>
                                             <action selector="addCurrency:" destination="BYZ-38-t0r" eventType="touchUpInside" id="fZB-mW-QaN"/>
                                         </connections>
@@ -110,8 +118,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cne-Xq-AEu">
-                                <rect key="frame" x="16" y="801" width="382" height="18"/>
-                                <state key="normal" image="Image-6"/>
+                                <rect key="frame" x="16" y="793" width="382" height="26"/>
+                                <fontDescription key="fontDescription" name=".AppleSystemUIFont" family=".AppleSystemUIFont" pointSize="11"/>
+                                <state key="normal" title="button"/>
                                 <connections>
                                     <action selector="showExchangeRates:" destination="BYZ-38-t0r" eventType="touchUpInside" id="1A3-Ja-nEo"/>
                                 </connections>
@@ -159,7 +168,7 @@
                     </view>
                     <navigationItem key="navigationItem" id="0tp-OU-De0"/>
                     <connections>
-                        <outlet property="button" destination="cne-Xq-AEu" id="xFO-Uq-uq3"/>
+                        <outlet property="changeBank" destination="cne-Xq-AEu" id="xFO-Uq-uq3"/>
                         <outlet property="imageView1" destination="5ls-oa-UWS" id="xvN-gj-HbN"/>
                         <outlet property="imageView2" destination="Mun-cs-tMe" id="Hkw-Ar-Xr4"/>
                         <outlet property="imageView3" destination="NDw-EQ-cbg" id="uR0-kJ-5Dm"/>
@@ -211,7 +220,6 @@
         <image name="Image-3" width="714" height="439"/>
         <image name="Image-4" width="44" height="44"/>
         <image name="Image-5" width="622" height="88"/>
-        <image name="Image-6" width="235" height="17"/>
         <namedColor name="ColorOfLabelLastUpdate">
             <color red="0.3411764705882353" green="0.3411764705882353" blue="0.3411764705882353" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

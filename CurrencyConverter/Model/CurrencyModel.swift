@@ -6,3 +6,10 @@
 //
 
 import Foundation
+
+struct CurrencyModel {
+    var name: String = ""
+    var buy: String = ""
+    var sale: String = ""
+    var rate: String = ""
+}
