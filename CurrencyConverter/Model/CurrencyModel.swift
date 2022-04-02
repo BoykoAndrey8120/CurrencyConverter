@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CurrencyModel {
+struct CurrencyModel: Codable {
     var name: String = ""
     var buy: String = ""
     var sale: String = ""

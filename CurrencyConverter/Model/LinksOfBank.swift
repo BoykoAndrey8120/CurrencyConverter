@@ -18,10 +18,9 @@ enum BankAPI: String {
 }
 var link2 = Link.urlPrivatBank.rawValue
 var link = Link.urlMonobank.rawValue
-var editBank = BankAPI.privatBank
+var editBank = BankAPI.monoBank
     
     func changeBank() {
-       
         if editBank == .privatBank {
         editBank = .monoBank
         } else {

@@ -20,8 +20,9 @@ class CurrencyConversion {
     var baseExchange: String?
     var baseCurrency: Bool
     var currencySale: String?
-    let currency = Currency()
+    // let currency = Currency()
     let array = [CurrencyConversion]()
+    var data = DataOfCurrencyRates()
     
     init(name: String, sale: String?) {
         self.name = name
@@ -31,47 +32,65 @@ class CurrencyConversion {
     
     func fill(name: String) -> String {
         var returnValue = ""
-        for i in currency.array {
-            if name == i.currencyName && self.baseCurrency == false {
-                returnValue = i.buy
-                return returnValue
+        for i in data.currencyModel {
+            if name == i.name && self.baseCurrency == false {
+                returnValue = i.sale
+                // return returnValue
             }
         }
         return returnValue
     }
     
-    func fill2(name: String, value: String, baseExchange: String?, baseValue: String?) -> String {
+    
+    func fill2(arrayCurrencies: [CurrencyModel], name: String, value: String, baseExchange: String?, baseValue: String?) -> String {
+        print(data.currencyModel)
         var rate = ""
+        var dRate: Double = 0
         var num: Double = 0
         var num2: Double = 0
         var koef: Double = 0
         var by = ""
-        
-        for i in currency.array {
-            if i.currencyName == baseExchange {
+        //        if let temp = Double(baseValue ?? "") {
+        //            num = temp
+        //        }
+        print(arrayCurrencies)
+        for i in arrayCurrencies {
+            if i.name == baseExchange {
                 rate = i.buy
+                if rate == "0.0" {
+                    rate = i.buy
+                }
+                
+                print(rate)
+                if let x = Double(rate) {
+                    dRate = x
+                }
+            } else {
+                // koef = Double(i.buy) ?? 0
+                print("not baseExchange")
             }
         }
-        for j in currency.array {
-            if j.currencyName == baseExchange {
+        for j in arrayCurrencies {
+            if j.name == baseExchange {
                 continue
             } else {
-                if j.currencyName == name {
+                if j.name == name {
                     if let temp = Double(baseValue ?? "") {
                         num = temp
-                        if let temp2 = Double(j.buy) {
-                            num2 = temp2
-                        }
+                    }
+                    if let temp2 = Double(j.buy) {
+                        num2 = temp2
                     }
                 }
                 if num2 > 1 {
-                    koef = num2 / num
+                    koef = num * (dRate / num2) * 10
                 } else {
-                    koef = (num2 * num) * 100
+                    koef = (num * (num2 * dRate)) * 100
                 }
             }
         }
         return String(koef)
     }
 }
+
 

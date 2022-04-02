@@ -35,7 +35,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var currencyItems: [CurrencyConversion] = [CurrencyConversion(name: "USD", sale: nil), CurrencyConversion(name: "EUR", sale: nil), CurrencyConversion(name: "RUR", sale: nil)]
     var baseValue: String?
     var link = Links()
-    var temp = DataOfCurrencyRates()
+    var dataOfCurrencyRates = DataOfCurrencyRates() {
+        didSet {
+            currArray = dataOfCurrencyRates.currencyModel
+        }
+    }
+    var currencyModel: CurrencyModel?
+    var currArray: [CurrencyModel] = []
     
     // MARK: Lifecycle
     override func viewDidAppear(_ animated: Bool) {
@@ -51,11 +57,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         scoreboardTableView.dataSource = self
         scoreboardTableView.register(UINib(nibName: "CurrencyScoreboardCell", bundle: nil), forCellReuseIdentifier: "CurrencyScoreboardCell")
         scoreboardTableView.reloadData()
-        changeBank.setTitle(link.editBank.rawValue, for: .normal)
-
-        
-        
+        // changeBank.setTitle(link.editBank.rawValue, for: .normal)
     }
+    
     override func viewDidLayoutSubviews() {
         if let myImage = UIImage(named: "Image-1"),
            let myImage2 = UIImage(named: "Image-2"),
@@ -75,38 +79,29 @@ class ViewController: UIViewController, UITextFieldDelegate {
         viewCurrency.layer.shadowOffset = CGSize(width: 0, height: 4)
         viewCurrency.layer.shadowOpacity = 1
         
-//        changeBank.titleLabel?.text = "text"
+        //  changeBank.titleLabel?.text = "text"
         
     }
     
     // MARK: Actions
     
     @IBAction func showExchangeRates(_ sender: Any) {
-        
-        link.changeBank()
-        changeBank.setTitle(link.editBank.rawValue, for: .normal)
-        if link.editBank == .privatBank {
-//            DispatchQueue.main.async { [self] in
-               // currency.currencyUpdatePrivat()
-            temp.dataOfPrivatbank()
-                print(temp.currencyModel)
-//                self.temp?.dataOfPrivatbank()
-//                print("EEEEEEEEEEEEEEE\(temp?.currencyModel)")
-//            }
-        } else {
-//            DispatchQueue.main.async {
-                self.currency.currencyUpdateMono()
-//                self.temp?.dataOfMonobank()
-//                print("EEEEEEEEEEEEEEE\(self.temp?.currencyModel)")
-//            }
-        print(currency.array)
+            if changeBank.titleLabel?.text == "button" {
+                self.changeBank.setTitle(self.link.editBank.rawValue, for: .normal)
+            }
+            else if link.editBank == .monoBank {
+                dataOfCurrencyRates.dataOfPrivatbank()
+                self.changeBank.setTitle(self.link.editBank.rawValue, for: .normal)
+                self.link.changeBank()
+                print(dataOfCurrencyRates.currencyModel)
+            }
+            else if link.editBank == .privatBank {
+                dataOfCurrencyRates.dataOfMonobank()
+                self.changeBank.setTitle(self.link.editBank.rawValue, for: .normal)
+                self.link.changeBank()
+                print(dataOfCurrencyRates.currencyModel)
+            }
     }
-        DispatchQueue.main.async {
-            self.currency.createResponse()
-        }
-        
-    }
-    // test
     
     
     @IBAction func addCurrency(_ sender: UIButton) {
@@ -121,11 +116,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
 }
 
 func textFildsInfo(name: CurrencyConversion, array: Currency) -> String {
-    for code in array.array {
-        if name.name == code.currencyName {
-            return code.buy
+    if let currencyModel = array.dataCurrency?.currencyModel {
+        for code in currencyModel {
+            if name.name == code.name {
+                return code.sale
+            }
+            
         }
-        
     }
     return ""
 }
@@ -134,25 +131,51 @@ extension ViewController {
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         if textField.isEditing {
+//            currencyItems.forEach {
+//                if $0.name == baseCurrency {
+//                    for num in currencyItems {
+//                        if num.name == baseCurrency {
+//                            baseValue = $0.value + string
+//
+//                        }
+//                    }
+//                } else {
+//                    $0.value = $0.fill2(name: $0.name, value: $0.value, baseExchange: baseCurrency, baseValue: baseValue)
+//
+//                }
+//            }
             currencyItems.forEach {
                 if $0.name == baseCurrency {
-                    for num in currencyItems {
-                        if num.name == baseCurrency {
-                            baseValue = $0.value + string
-                            
-                        }
-                    }
-                } else {
-                    $0.value = $0.fill2(name: $0.name, value: $0.value, baseExchange: baseCurrency, baseValue: baseValue)
-                }
+                                    for num in currencyItems {
+                                        if num.name == baseCurrency {
+                                            baseValue = textField.text
+                                        }
+                                    }
+                                } else {
+                                    $0.value = $0.fill2(arrayCurrencies: dataOfCurrencyRates.currencyModel, name: $0.name, value: $0.value, baseExchange: baseCurrency, baseValue: baseValue)
+                
+            }
             }
         }
         return true
     }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         currencyItems.forEach { if $0.value == textField.text {
             $0.value = "1"
             baseCurrency = $0.name
+            currencyItems.forEach {
+                if $0.name == baseCurrency {
+                                    for num in currencyItems {
+                                        if num.name == baseCurrency {
+                                            baseValue = textField.text
+                                        }
+                                    }
+                                } else {
+                                    $0.value = $0.fill2(arrayCurrencies: dataOfCurrencyRates.currencyModel, name: $0.name, value: $0.value, baseExchange: baseCurrency, baseValue: baseValue)
+                
+            }
+            }
         }
         }
     }
@@ -163,7 +186,7 @@ extension ViewController {
 extension ViewController: CurrencyViewControllerDelegate {
     
     func currencySelected(currency: String) {
-        currencyItems.append(CurrencyConversion(name: currency, sale: nil))
+        currencyItems.append(CurrencyConversion(name: currency, sale: currency))
         scoreboardTableView.reloadData()
         
     }
